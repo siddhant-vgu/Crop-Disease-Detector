@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Disease Detector</title>
+
+  <!-- ✅ CSS -->
+  <link rel="stylesheet" href="/static/CSS/styles.css">
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+
+<body>
+    <div id="debugPanel"
+        style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-size: 12px; z-index: 9999; display: none;">
+        <h4>Debug Panel</h4> <button onclick="testSections()">Test Sections</button> <button
+            onclick="testNavigation()">Test Navigation</button> <button onclick="switchToSection('dashboard')">Go to
+            Dashboard</button> <button onclick="switchToSection('crop-detection')">Go to Detection</button> <button
+            onclick="switchToSection('reports')">Go to Reports</button> <button onclick="switchToSection('about')">Go to
+            About</button> <button onclick="document.getElementById('debugPanel').style.display='none'">Hide</button>
+    </div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-icon"> <i class="fas fa-seedling"></i> </div>
+                <div class="brand-text"> <span class="brand-name">Crop Disease Detector</span> <span
+                        class="brand-subtitle">Smart Farming</span> </div>
+            </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link active"> <i class="fas fa-home"></i> <span>Home</span> </a></li>
+                    <li><a href="#dashboard" class="nav-link"> <i class="fas fa-chart-line"></i> <span>Dashboard</span> </a></li>
+                    <li><a href="#crop-detection" class="nav-link"> <i class="fas fa-camera"></i> <span>Detection</span></a></li>
+                    <li><a href="#reports" class="nav-link"> <i class="fas fa-chart-bar"></i> <span>Reports</span> </a></li>
+                    <li><a href="#about" class="nav-link"> <i class="fas fa-info-circle"></i> <span>About</span> </a></li>
+                </ul>
+            <div class="nav-toggle"> <span></span> <span></span> <span></span> </div>
+        </div>
+    </nav>
+    <div id="alertsContainer" class="alerts-container"></div>
+    <main class="main-content">
+        <section id="home" class="section active">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1 class="hero-title">Crop Disease Detector</h1>
+                    <p class="hero-tagline">Smart Farming Solution</p>
+                    <p class="hero-description"> Detect crop diseases early with our AI-powered system. Monitor
+                        environmental conditions, upload crop images for instant disease detection, and get actionable
+                        insights to protect your harvest and maximize yield. </p>
+                    <div class="hero-buttons"> <a href="#dashboard" class="btn btn-primary">Get Started</a> <a
+                            href="#about" class="btn btn-secondary">Learn More</a> </div>
+                </div>
+                <div class="hero-image">
+                    <div class="hero-graphic"> <i class="fas fa-seedling hero-icon"></i>
+                        <div class="floating-elements">
+                            <div class="floating-icon temp-icon">🌡️</div>
+                            <div class="floating-icon humidity-icon">💧</div>
+                            <div class="floating-icon air-icon">🌫️</div>
+                            <div class="floating-icon crop-icon">🌱</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="features-section">
+                <div class="container">
+                    <h2 class="section-title">Key Features</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon"> <i class="fas fa-camera"></i> </div>
+                            <h3>Disease Detection</h3>
+                            <p>Upload crop leaf images to instantly detect diseases using AI-powered image analysis and
+                                get treatment recommendations.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon"> <i class="fas fa-thermometer-half"></i> </div>
+                            <h3>Live Monitoring</h3>
+                            <p>Monitor temperature, humidity, and air quality in real-time to track environmental
+                                conditions affecting crop health.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon"> <i class="fas fa-chart-bar"></i> </div>
+                            <h3>History & Reports</h3>
+                            <p>View past disease detection results and environmental data in organized date-wise tables
+                                and graphs.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon"> <i class="fas fa-shield-alt"></i> </div>
+                            <h3>Early Prevention</h3>
+                            <p>Get early warnings and preventive measures to protect your crops before diseases spread
+                                and cause damage.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="dashboard" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>Live Monitoring Dashboard</h1>
+                    <p>Real-time environmental monitoring for optimal crop health</p>
+                </div>
+                <div class="sensor-grid">
+                    <div class="sensor-card" data-sensor="temperature">
+                        <div class="sensor-icon animated"> <i class="fas fa-thermometer-half"></i> </div>
+                        <div class="sensor-content">
+                            <h3 id="temperature">28°C</h3>
+                            <p>Temperature</p> <span class="sensor-status normal" id="temp-status">Normal</span>
+                        </div>
+                        <div class="sensor-indicator" id="temp-indicator"></div>
+                    </div>
+                    <div class="sensor-card" data-sensor="humidity">
+                        <div class="sensor-icon animated"> <i class="fas fa-tint"></i> </div>
+                        <div class="sensor-content">
+                            <h3 id="humidity">60%</h3>
+                            <p>Humidity</p> <span class="sensor-status normal" id="humidity-status">Normal</span>
+                        </div>
+                        <div class="sensor-indicator" id="humidity-indicator"></div>
+                    </div>
+                    <div class="sensor-card" data-sensor="air-quality">
+                        <div class="sensor-icon animated"> <i class="fas fa-wind"></i> </div>
+                        <div class="sensor-content">
+                            <h3 id="air-quality">85 AQI</h3>
+                            <p>Air Quality</p> <span class="sensor-status warning" id="air-status">High</span>
+                        </div>
+                        <div class="sensor-indicator warning" id="air-indicator"></div>
+                    </div>
+                    <div class="sensor-card" data-sensor="crop-health">
+                        <div class="sensor-icon animated"> <i class="fas fa-seedling"></i> </div>
+                        <div class="sensor-content">
+                            <h3 id="crop-health">85%</h3>
+                            <p>Crop Health</p> <span class="sensor-status good" id="crop-status">Healthy</span>
+                        </div>
+                        <div class="sensor-indicator good" id="crop-indicator"></div>
+                    </div>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Environmental Trends</h3>
+                            <div class="chart-controls"> <button class="btn-small active" data-period="24h">24H</button>
+                                <button class="btn-small" data-period="7d">7D</button> <button class="btn-small"
+                                    data-period="30d">30D</button>
+                            </div>
+                        </div>
+                        <canvas id="environmentChart"></canvas>
+                    </div>
+                    <div class="crop-status">
+                        <div class="status-header">
+                            <h3>Crop Health Status</h3>
+                        </div>
+                        <div class="crop-list">
+                            <div class="crop-item">
+                                <div class="crop-icon"> <i class="fas fa-seedling"></i> </div>
+                                <div class="crop-info">
+                                    <h4>Tomatoes</h4>
+                                    <p>Field A - 2.5 acres</p>
+                                </div>
+                                <div class="crop-health"> <span class="health-indicator excellent">Excellent</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 95%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="crop-item">
+                                <div class="crop-icon"> <i class="fas fa-seedling"></i> </div>
+                                <div class="crop-info">
+                                    <h4>Wheat</h4>
+                                    <p>Field B - 5.0 acres</p>
+                                </div>
+                                <div class="crop-health"> <span class="health-indicator good">Good</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 78%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="crop-item">
+                                <div class="crop-icon"> <i class="fas fa-seedling"></i> </div>
+                                <div class="crop-info">
+                                    <h4>Corn</h4>
+                                    <p>Field C - 3.2 acres</p>
+                                </div>
+                                <div class="crop-health"> <span class="health-indicator warning">Needs Attention</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill warning" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alerts-section">
+                    <h3>Recent Alerts</h3>
+                    <div class="alerts-list">
+                        <div class="alert-item warning"> <i class="fas fa-exclamation-triangle"></i>
+                            <div class="alert-content">
+                                <h4>Low Light Level Detected</h4>
+                                <p>Field C shows reduced light levels. Consider adjusting irrigation schedule.</p> <span
+                                    class="alert-time">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="alert-item info"> <i class="fas fa-info-circle"></i>
+                            <div class="alert-content">
+                                <h4>Irrigation Scheduled</h4>
+                                <p>Automatic irrigation will start in 30 minutes for Field A.</p> <span
+                                    class="alert-time">1 hour ago</span>
+                            </div>
+                        </div>
+                        <div class="alert-item success"> <i class="fas fa-check-circle"></i>
+                            <div class="alert-content">
+                                <h4>Harvest Ready</h4>
+                                <p>Tomatoes in Field A are ready for harvest.</p> <span class="alert-time">3 hours
+                                    ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="crop-detection" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>Crop Disease Detection</h1>
+                    <p>Upload crop leaf images for instant AI-powered disease detection</p>
+                </div>
+                <div class="detection-container">
+                    <div class="upload-section">
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-content"> <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <h3>Upload Crop Image</h3>
+                                <p>Drag and drop your image here or click to browse</p> <input type="file"
+                                    id="imageInput" accept="image/*" hidden> <button class="btn btn-primary"
+                                    onclick="document.getElementById('imageInput').click()"> Choose Image </button>
+                            </div>
+                        </div>
+                        <div class="image-preview" id="imagePreview" style="display: none;"> <img id="previewImg" src=""
+                                alt="Preview">
+                            <div class="preview-actions"> <button class="btn btn-primary" id="detectBtn"> <i
+                                        class="fas fa-search"></i> Detect Disease </button> <button
+                                    class="btn btn-secondary" id="clearBtn"> <i class="fas fa-times"></i> Clear
+                                </button> </div>
+                        </div>
+                    </div>
+                    <div class="results-section" id="resultsSection" style="display: none;">
+                        <h3>Detection Results</h3>
+                        <div class="result-card">
+                            <div class="result-item"> <span class="result-label">Crop Type:</span> <span
+                                    class="result-value" id="cropType">Tomato</span> </div>
+                            <div class="result-item"> <span class="result-label">Health Status:</span> <span
+                                    class="result-value" id="healthStatus"> <span
+                                        class="status-badge healthy">Healthy</span> </span> </div>
+                            <div class="result-item"> <span class="result-label">Confidence:</span> <span
+                                    class="result-value" id="confidence">92%</span> </div>
+                            <div class="result-item"> <span class="result-label">Suggested Action:</span> <span
+                                    class="result-value" id="suggestedAction">Continue regular watering and
+                                    monitoring</span> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="reports" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>History & Reports</h1>
+                    <p>View past disease detection results and environmental data</p>
+                </div>
+                <div class="reports-container">
+                    <div class="reports-controls">
+                        <div class="date-range"> <label>Date Range:</label> <input type="date" id="startDate">
+                            <span>to</span> <input type="date" id="endDate">
+                        </div>
+                        <div class="export-buttons"> <button class="btn btn-secondary" id="exportCSV"> <i
+                                    class="fas fa-file-csv"></i> Export CSV </button> <button class="btn btn-secondary"
+                                id="exportPDF"> <i class="fas fa-file-pdf"></i> Export PDF </button> </div>
+                    </div>
+                    <div class="reports-table">
+                        <table id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Temperature</th>
+                                    <th>Humidity</th>
+                                    <th>Air Quality</th>
+                                    <th>Crop Health</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dataTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="about" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>About Crop Disease Detector</h1>
+                    <p>Revolutionizing agriculture through AI-powered disease detection</p>
+                </div>
+                <div class="about-content">
+                    <div class="about-intro">
+                        <h2>Project Introduction</h2>
+                        <p> Crop Disease Detector is an innovative AI-powered solution designed to help farmers identify
+                            crop diseases early and accurately. Our system combines computer vision, machine learning,
+                            and real-time environmental monitoring to provide comprehensive crop health management. By
+                            uploading simple leaf images, farmers can instantly detect diseases and receive actionable
+                            treatment recommendations. </p>
+                    </div>
+                    <div class="team-section">
+                        <h2>Our Team</h2>
+                        <div class="team-grid">
+                            <div class="team-member">
+                                <div class="member-avatar"> <i class="fas fa-user"></i> </div>
+                                <h3>Hemant Mahawar</h3>
+                                <p>frontend and backend(Flask)/UI/UX Designer</p>
+                            </div>
+                            <div class="team-member">
+                                <div class="member-avatar"> <i class="fas fa-user"></i> </div>
+                                <h3>Khubilal Javat</h3>
+                                <p>ML-Model Trainer</p>
+                            </div>
+                            <div class="team-member">
+                                <div class="member-avatar"> <i class="fas fa-user"></i> </div>
+                                <h3>Siddhant Yadav</h3>
+                                <p>Bot Developer</p>
+                            </div>
+                            <div class="team-member">
+                                <div class="member-avatar"> <i class="fas fa-user"></i> </div>
+                                <h3>Argho Nandi</h3>
+                                <p>ML-Model Trainer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="future-scope">
+                        <h2>Future Scope</h2>
+                        <div class="scope-grid">
+                            <div class="scope-item"> <i class="fas fa-brain"></i>
+                                <h3>Advanced AI Models</h3>
+                                <p>Integration of more sophisticated deep learning models for improved disease detection
+                                    accuracy.</p>
+                            </div>
+                            <div class="scope-item"> <i class="fas fa-mobile-alt"></i>
+                                <h3>Mobile Application</h3>
+                                <p>Native mobile app for farmers to detect diseases on-the-go using smartphone cameras.
+                                </p>
+                            </div>
+                            <div class="scope-item"> <i class="fas fa-satellite"></i>
+                                <h3>Drone Integration</h3>
+                                <p>Automated field scanning using drones for large-scale crop disease monitoring.</p>
+                            </div>
+                            <div class="scope-item"> <i class="fas fa-cloud"></i>
+                                <h3>Cloud Analytics</h3>
+                                <p>Advanced cloud-based analytics and predictive modeling for disease outbreak
+                                    prevention.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-section">
+                        <h2>Contact Us</h2>
+                        <div class="contact-info">
+                            <div class="contact-item"> <i class="fas fa-envelope"></i>
+                                <span>Hemant Mahawar</span>
+                            </div>
+                            <div class="contact-item"> <i class="fas fa-phone"></i> <span> +91 8854885428 </span>
+                            </div>
+                            <div class="contact-item"> <i class="fas fa-map-marker-alt"></i> <span>Vivekananda Global University,Jaipur, Rajasthan,india</span> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <div class="footer-icon"> <i class="fas fa-seedling"></i> </div>
+                        <div class="footer-brand-text">
+                            <h3>Crop Disease Detector</h3>
+                            <p>Smart Farming Solution</p>
+                        </div>
+                    </div>
+                    <p class="footer-description"> AI-powered crop disease detection system that helps farmers identify
+                        diseases early, monitor environmental conditions, and protect their harvest with actionable
+                        insights. </p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="#dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                        <li><a href="#crop-detection"><i class="fas fa-camera"></i> Crop Detection</a></li>
+                        <li><a href="#reports"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Features</h4>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-camera"></i> Disease Detection</li>
+                        <li><i class="fas fa-thermometer-half"></i> Live Monitoring</li>
+                        <li><i class="fas fa-chart-bar"></i> History & Reports</li>
+                        <li><i class="fas fa-shield-alt"></i> Early Prevention</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="team-social-grid">
+                        <div class="team-member-footer">
+                            <h5>Hemant Mahawar</h5>
+                            <p class="member-title">frontend and backend(Flask)/UI/UX Designer</p>
+                            <p><i class="fas fa-envelope"></i>hemantmahawar278@gmail.com</p>
+                            <p><i class="fas fa-phone"></i>+91 8854885428</p>
+                            <div class="member-social-links">
+                                <a href="https://github.com/Hemantmahawar95" class="social-link github"><i class="fab fa-github"></i></a>
+                                <a href="http://linkedin.com/in/hemant-mahawar-38281635a" class="social-link linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                        <div class="team-member-footer">
+                            <h5>Khubilal Javat </h5>
+                            <p class="member-title">ML-Model Trainer</p>
+                            <p><i class="fas fa-envelope"></i>khubilaljavat@gmail.com</p>
+                            <p><i class="fas fa-phone"></i>+91 7426921976</p>
+                            <div class="member-social-links">
+                                <a href="https://github.com/Khubilal123" class="social-link github"><i class="fab fa-github"></i></a>
+                                <a href="http://www.linkedin.com/in/" class="social-link linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                        <div class="team-member-footer">
+                            <h5>Siddhant Yadav</h5>
+                            <p class="member-title">Bot Developer</p>
+                            <p><i class="fas fa-envelope"></i>Siddhantyad12@gmail.com</p>
+                            <p><i class="fas fa-phone"></i> +91 7023446224</p>
+                            <div class="member-social-links">
+                                <a href="https://github.com/siddhant-vgu" class="social-link github"><i class="fab fa-github"></i></a>
+                                <a href="https://www.linkedin.com/in/siddhant-yadav-658a0b331/" class="social-link linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                        <div class="team-member-footer">
+                            <h5>Argho Nandi</h5>
+                            <p class="member-title">ML-Model Trainer</p>
+                            <p><i class="fas fa-envelope"></i>arghoghost@gmail.com</p>
+                            <p><i class="fas fa-phone"></i> +91 9932507716</p>
+                            <div class="member-social-links">
+                                <a href="http://github.com/Boss-subo" class="social-link github"><i class="fab fa-github"></i></a>
+                                <a href="https://www.linkedin.com/in/argho-nandi" class="social-link linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2024 Crop Disease Detector. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+        <script src="/static/JAVA/script.js"></script>
+
+</body>
+ 
+</html>
